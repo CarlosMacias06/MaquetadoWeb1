@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Parqueadero</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Inicio -->
+    <header>
+        <h1>Bienvenido al Sistema de Parqueadero</h1>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#registro">Registro</a></li>
+                <li><a href="#admin">Panel de Administración</a></li>
+                <li><a href="#reservas">Reservas</a></li>
+                <li><a href="#disponibilidad">Disponibilidad</a></li>
+                <li><a href="#cancelar">Cancelar Reserva</a></li>
+                <li><a href="#reporte">Reporte Diario</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Página de Inicio -->
+    <section id="inicio">
+        <h2>Información General</h2>
+        <p>Horarios: 8:00 AM - 10:00 PM</p>
+        <p>Tarifas: $2 por hora</p>
+        <h3>Noticias</h3>
+        <p>Mantente al tanto de nuestras últimas actualizaciones.</p>
+    </section>
+
+    <!-- Interfaz de Registro -->
+    <section id="registro">
+        <h2>Registro de Usuarios</h2>
+        <form id="registroForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required><br><br>
+
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" required><br><br>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </section>
+
+    <!-- Panel de Control del Administrador -->
+    <section id="admin">
+        <h2>Panel de Administración</h2>
+        <h3>Ocupación en Tiempo Real</h3>
+        <p>Espacios disponibles: 25/100</p>
+        <h3>Gestión de Reservas</h3>
+        <p>Reservas activas: 35</p>
+        <button>Generar Reporte</button>
+    </section>
+
+    <!-- Interfaz de Reservas -->
+    <section id="reservas">
+        <h2>Reservar Espacio</h2>
+        <label for="fechaReserva">Elige una Fecha:</label>
+        <input type="date" id="fechaReserva" required><br><br>
+
+        <label for="espacioReserva">Elige un Espacio:</label>
+        <select id="espacioReserva">
+            <option value="1">Espacio 1</option>
+            <option value="2">Espacio 2</option>
+            <option value="3">Espacio 3</option>
+        </select><br><br>
+
+        <button>Confirmar Reserva</button>
+    </section>
+
+    <!-- Interfaz de Disponibilidad -->
+    <section id="disponibilidad">
+        <h2>Disponibilidad de Espacios</h2>
+        <p>Actualización en tiempo real: 30/100 espacios disponibles.</p>
+        <button onclick="actualizarDisponibilidad()">Actualizar Disponibilidad</button>
+    </section>
+
+    <!-- Interfaz de Cancelación de Reservas -->
+    <section id="cancelar">
+        <h2>Cancelar Reserva</h2>
+        <form id="cancelarReservaForm">
+            <label for="codigoReserva">Código de Reserva:</label>
+            <input type="text" id="codigoReserva" name="codigoReserva" required><br><br>
+            <button type="submit">Cancelar Reserva</button>
+        </form>
+    </section>
+
+    <!-- Interfaz de Reporte del Uso Diario -->
+    <section id="reporte">
+        <h2>Reporte del Uso Diario del Parqueadero</h2>
+        <p>Selecciona la fecha para la cual deseas generar un reporte de uso del parqueadero.</p>
+        <input type="date" id="fechaReporte" required><br><br>
+        <button onclick="generarReporte()">Generar Reporte</button>
+        <p id="reporteTexto"></p>
+    </section>
+
+    <script>
+        // Validar Nombre
+        function validarNombre(nombre) {
+            const regex = /^[A-Za-z\s]+$/;
+            return regex.test(nombre);
+        }
+
+        // Validar Email
+        function validarEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        // Validar Teléfono (10 dígitos)
+        function validarTelefono(telefono) {
+            const regex = /^\d{10}$/;
+            return regex.test(telefono);
+        }
+
+        // Validar Contraseña (Mínimo 8 caracteres, al menos una letra y un número)
+        function validarContrasena(contrasena) {
+            const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            return regex.test(contrasena);
+        }
+
+        // Validación del Formulario de Registro
+        document.getElementById('registroForm').addEventListener('submit', function(event) {
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const contrasena = document.getElementById('contrasena').value;
+
+            if (!validarNombre(nombre)) {
+                alert('Nombre inválido');
+                event.preventDefault();
+            }
+            if (!validarEmail(email)) {
+                alert('Email inválido');
+                event.preventDefault();
+            }
+            if (!validarTelefono(telefono)) {
+                alert('Teléfono inválido');
+                event.preventDefault();
+            }
+            if (!validarContrasena(contrasena)) {
+                alert('Contraseña inválida');
+                event.preventDefault();
+            }
+        });
+
+        // Actualización de Disponibilidad
+        function actualizarDisponibilidad() {
+            const disponibles = Math.floor(Math.random() * 100) + 1;
+            alert('Espacios disponibles actualizados: ' + disponibles + '/100');
+        }
+
+        // Cancelar Reserva
+        document.getElementById('cancelarReservaForm').addEventListener('submit', function(event) {
+            const codigoReserva = document.getElementById('codigoReserva').value;
+            if (codigoReserva === "") {
+                alert('Por favor, ingrese un código de reserva válido.');
+                event.preventDefault();
+            } else {
+                alert('Reserva con código ' + codigoReserva + ' ha sido cancelada.');
+                event.preventDefault();
+            }
+        });
+
+        // Generar Reporte de Uso Diario
+        function generarReporte() {
+            const fecha = document.getElementById('fechaReporte').value;
+            if (fecha === "") {
+                alert('Por favor, selecciona una fecha.');
+            } else {
+                document.getElementById('reporteTexto').innerText = 'Reporte del uso del parqueadero para la fecha ' + fecha + ': 70/100 espacios ocupados.';
+            }
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Sistema de Parqueadero</p>
+    </footer>
+</body>
+</html>
